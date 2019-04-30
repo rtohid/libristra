@@ -56,7 +56,7 @@ struct lua_value<T, std::enable_if_t<std::is_integral<T>::value> > {
   static T get(lua_State * s, int index = -1)
   {
     if (!lua_isnumber(s, index))
-      throw_runtime_error(std::string("Invalid conversion of type \"") +
+      THROW_RUNTIME_ERROR(std::string("Invalid conversion of type \"") +
         lua_typestring(s, index) + "\" to int.");
     auto i = lua_tointeger(s, index);
     lua_remove(s, index);
@@ -75,7 +75,7 @@ struct lua_value<T, std::enable_if_t<std::is_floating_point<T>::value> > {
   static T get(lua_State * s, int index = -1)
   {
     if (!lua_isnumber(s, index))
-      throw_runtime_error("Invalid conversion of type \"" +
+      THROW_RUNTIME_ERROR("Invalid conversion of type \"" +
         lua_typestring(s, index) + "\" to double.");
     auto x = lua_tonumber(s, index);
     lua_remove(s, index);
@@ -94,7 +94,7 @@ struct lua_value<bool> {
   static bool get(lua_State * s, int index = -1)
   {
     if (!lua_isboolean(s, index))
-      throw_runtime_error("Invalid conversion of type \"" +
+      THROW_RUNTIME_ERROR("Invalid conversion of type \"" +
         lua_typestring(s, index) + "\" to bool.");
     auto b = lua_toboolean(s, index);
     lua_remove(s, index);
@@ -113,7 +113,7 @@ struct lua_value<std::string> {
   static std::string get(lua_State * s, int index = -1)
   {
     if (!lua_isstring(s, index))
-      throw_runtime_error("Invalid conversion of type \"" +
+      THROW_RUNTIME_ERROR("Invalid conversion of type \"" +
         lua_typestring(s, index) + "\" to string.");
     auto str = lua_tostring(s, index);
     lua_remove(s, index);
@@ -134,7 +134,7 @@ struct lua_value<Vector<T, Allocator> > {
   {
     // make sure we are accessing a table
     if (!lua_istable(s, index))
-      throw_runtime_error("Invalid conversion of type \"" +
+      THROW_RUNTIME_ERROR("Invalid conversion of type \"" +
         lua_typestring(s, index) + "\" to vector.");
     // get the size of the table
     auto n = lua_rawlen(s, -1);
@@ -164,12 +164,12 @@ struct lua_value<Array<T, N> > {
   {
     // make sure we are accessing a table
     if (!lua_istable(s, index))
-      throw_runtime_error("Invalid conversion of type \"" +
+      THROW_RUNTIME_ERROR("Invalid conversion of type \"" +
         lua_typestring(s, index) + "\" to vector.");
     // get the size of the table
     auto n = lua_rawlen(s, -1);
     if (n != N)
-      throw_runtime_error("Expecting array of size" + std::to_string(N) +
+      THROW_RUNTIME_ERROR("Expecting array of size" + std::to_string(N) +
         ", stack array is size " + std::to_string(n));
     // extract the results
     Array<T, N> res;

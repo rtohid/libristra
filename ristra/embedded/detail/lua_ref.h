@@ -105,7 +105,7 @@ inline size_t lua_push(lua_State * s, const std::array<double, N> & arr)
     ss << "Cannot grow stack " << (N - 1) << " slots operating on element \""
        << "\"." << std::endl
        << "Current stack size is " << lua_gettop(s) << ".";
-    throw_runtime_error(ss.str());
+    THROW_RUNTIME_ERROR(ss.str());
   }
   // push each element of the array
   for (size_t i = 0; i < N; ++i) {
@@ -128,7 +128,7 @@ inline size_t lua_push(lua_State * s, const Arr_T & arr)
     ss << "Cannot grow stack " << (N - 1) << " slots operating on element \""
        << "\"." << std::endl
        << "Current stack size is " << lua_gettop(s) << ".";
-    throw_runtime_error(ss.str());
+    THROW_RUNTIME_ERROR(ss.str());
   }
   // push each element of the array
   for (size_t i = 0; i < N; ++i) {

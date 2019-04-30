@@ -97,7 +97,7 @@ class lua_result_t : public lua_base_t
       ss << "Cannot grow stack " << extra << " slots operating on element \""
          << name_ << "\"." << std::endl
          << "Current stack size is " << lua_gettop(s) << ".";
-      throw_runtime_error(ss.str());
+      THROW_RUNTIME_ERROR(ss.str());
     }
   }
 
@@ -105,7 +105,7 @@ class lua_result_t : public lua_base_t
   {
     if (lua_isnil(state(), -1)) {
       print_last_row();
-      throw_runtime_error("\"" + name + "\" does not exist.");
+      THROW_RUNTIME_ERROR("\"" + name + "\" does not exist.");
     }
   }
 
@@ -114,7 +114,7 @@ class lua_result_t : public lua_base_t
     check_nil(name);
     if (!lua_istable(state(), -1)) {
       print_last_row();
-      throw_runtime_error("\"" + name + "\" is not a table.");
+      THROW_RUNTIME_ERROR("\"" + name + "\" is not a table.");
     }
   }
 
@@ -124,7 +124,7 @@ class lua_result_t : public lua_base_t
   {
     if (lua_isnil(state(), -1)) {
       print_last_row();
-      throw_runtime_error("\"" + name + "\" returned nil.");
+      THROW_RUNTIME_ERROR("\"" + name + "\" returned nil.");
     }
   }
 
@@ -135,7 +135,7 @@ class lua_result_t : public lua_base_t
     check_nil(name);
     if (!lua_isfunction(state(), -1)) {
       print_last_row();
-      throw_runtime_error("\"" + name + "\" is not a function.");
+      THROW_RUNTIME_ERROR("\"" + name + "\" is not a function.");
     }
   }
 
@@ -210,7 +210,7 @@ class lua_result_t : public lua_base_t
   {
     if (refs_.size() != 1) {
       HERE("");
-      throw_runtime_error(
+      THROW_RUNTIME_ERROR(
         "Expecting 1 result, stack has " + std::to_string(refs_.size()));
     }
     push_last();
@@ -230,7 +230,7 @@ class lua_result_t : public lua_base_t
   //   using Tup = std::tuple<Args...>;
   //   if ( refs_.size() != N )
   //     HERE("");
-  //     throw_runtime_error(std::to_string(__LINE__) + ":Expecting " +
+  //     THROW_RUNTIME_ERROR(std::to_string(__LINE__) + ":Expecting " +
   //       std::to_string(N) + " results, stack has " +
   //       std::to_string(refs_.size()));
   //   push_all();
@@ -349,7 +349,7 @@ class lua_result_t : public lua_base_t
     auto ret = lua_pcall(s, nargs_pushed, LUA_MULTRET, 0);
     if (ret) {
       print_last_row();
-      throw_runtime_error("Problem calling \"" + name_ + "\".");
+      THROW_RUNTIME_ERROR("Problem calling \"" + name_ + "\".");
     }
 
     // make sure the result is non nill
